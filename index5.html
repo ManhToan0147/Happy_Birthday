@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Chúc Mừng Sinh Nhật Ngọc Anh! 🎂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            overflow: hidden;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Canvas cho pháo hoa - Layer thấp nhất */
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Title CHÚC MỪNG SINH NHẬT */
+        .birthday-title {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 180;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 
+                0 0 20px rgba(255, 215, 0, 1),
+                0 0 40px rgba(255, 215, 0, 0.8),
+                0 0 60px rgba(255, 215, 0, 0.6),
+                2px 2px 8px rgba(0, 0, 0, 0.8);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        @keyframes titleGlow {
+            from {
+                text-shadow: 
+                    0 0 20px rgba(255, 215, 0, 1),
+                    0 0 40px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.6);
+                transform: translateX(-50%) scale(1);
+            }
+            to {
+                text-shadow: 
+                    0 0 30px rgba(255, 215, 0, 1),
+                    0 0 60px rgba(255, 215, 0, 1),
+                    0 0 80px rgba(255, 215, 0, 0.8),
+                    0 0 100px rgba(255, 215, 0, 0.6);
+                transform: translateX(-50%) scale(1.02);
+            }
+        }
+
+        /* Avatar bên trái */
+        .avatar-frame {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #000000, #1a1a1a, #000000);
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.7),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+            z-index: 150;
+            overflow: hidden;
+            animation: avatarGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatarGlow {
+            from { 
+                box-shadow: 
+                    0 0 30px rgba(255, 215, 0, 0.7),
+                    inset 0 0 20px rgba(255, 215, 0, 0.1);
+            }
+            to { 
+                box-shadow: 
+                    0 0 50px rgba(255, 215, 0, 1),
+                    0 0 70px rgba(255, 215, 0, 0.8),
+                    inset 0 0 30px rgba(255, 215, 0, 0.2);
+            }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            background: url('https://scontent.fhan14-4.fna.fbcdn.net/v/t39.30808-6/486556504_1757827518099935_4397397881058653122_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=L1bHFPFRaYcQ7kNvwH6kzbE&_nc_oc=AdlxFWIcoTh9joEgRVegThO6mJvGnp5kiqrKuWpJJG-pbx2oiR2pT2V4GNfjEH7463RWnlyp4U_qfBc4MDcZT-2A&_nc_zt=23&_nc_ht=scontent.fhan14-4.fna&_nc_gid=5yxB3HQ0WpQ8t58issbV2g&oh=00_AfWEQFWROP6Cdsu98S0GZ89UGbrGE0FGphPOQP9vnTu_5Q&oe=68B8B264') center/cover;
+        }
+
+        /* Khung vuông chính - RỘNG HƠN */
+        .main-frame {
+            width: 800px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 3px solid #FFD700;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.5),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            margin-top: 80px;
+        }
+
+        /* Text container cho chạy chữ - PADDING ĐỀU 2 BÊN */
+        .text-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 40px 50px;
+            z-index: 120;
+        }
+
+        .scrolling-text {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.9),
+                0 0 30px rgba(255, 215, 0, 0.7),
+                2px 2px 6px rgba(0, 0, 0, 0.9);
+            text-align: center;
+            line-height: 1.4;
+            white-space: nowrap;
+            animation: scrollUpSlow 45s linear;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            z-index: 130;
+            position: relative;
+            max-width: 700px;
+            padding: 0 30px;
+        }
+
+        @keyframes scrollUpSlow {
+            0% {
+                bottom: -100%;
+                opacity: 1;
+            }
+            85% {
+                bottom: 120%;
+                opacity: 1;
+            }
+            100% {
+                bottom: 120%;
+                opacity: 0;
+            }
+        }
+
+        /* Scroll container - PADDING ĐỀU */
+        .scroll-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 40px 50px;
+            z-index: 120;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: rgba(51, 51, 51, 0.5);
+            border-radius: 4px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #FFD700;
+            border-radius: 4px;
+        }
+
+        .scroll-text {
+            color: #FFD700;
+            font-size: 1.0rem;
+            font-weight: bold;
+            text-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.9),
+                0 0 25px rgba(255, 215, 0, 0.7),
+                2px 2px 4px rgba(0, 0, 0, 0.9);
+            text-align: justify;
+            line-height: 1.6;
+            z-index: 130;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        /* Bánh sinh nhật - QUAY LẠI EMOJI CŨ */
+        .cake-container {
+            display: none;
+            text-align: center;
+            animation: cakeAppear 2s ease-in-out;
+            padding: 60px 40px;
+            z-index: 120;
+            position: relative;
+        }
+
+        @keyframes cakeAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .cake {
+            font-size: 6rem;
+            margin-bottom: 20px;
+            animation: cakeFloat 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        @keyframes cakeFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+
+        .age-text {
+            font-size: 3rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+            text-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.9),
+                0 0 50px rgba(255, 215, 0, 0.7),
+                2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: ageGlow 2s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .age-text::before,
+        .age-text::after {
+            content: '✨';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .age-text::before {
+            left: -60px;
+            animation-delay: 0s;
+        }
+
+        .age-text::after {
+            right: -60px;
+            animation-delay: 1s;
+        }
+
+        @keyframes ageGlow {
+            from { 
+                text-shadow: 
+                    0 0 30px rgba(255, 215, 0, 0.9),
+                    0 0 50px rgba(255, 215, 0, 0.7);
+                transform: scale(1);
+            }
+            to { 
+                text-shadow: 
+                    0 0 50px rgba(255, 215, 0, 1), 
+                    0 0 70px rgba(255, 215, 0, 0.8),
+                    0 0 90px rgba(255, 215, 0, 0.6);
+                transform: scale(1.03);
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.6; transform: translateY(-50%) scale(1); }
+            50% { opacity: 1; transform: translateY(-50%) scale(1.2); }
+        }
+
+        .candles {
+            font-size: 1.2rem;
+            animation: candleFlicker 0.8s ease-in-out infinite alternate;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            margin-bottom: 20px;
+        }
+
+        @keyframes candleFlicker {
+            from { 
+                opacity: 0.9; 
+                transform: scale(1) rotate(-1deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1.05) rotate(1deg); 
+            }
+        }
+
+        .birthday-wish {
+            font-size: 1.1rem;
+            color: #FFF;
+            margin-top: 20px;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.8),
+                2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700;
+            font-size: 0.9rem;
+            opacity: 0;
+            z-index: 120;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            animation: fadeInHint 2s ease-in 2s forwards;
+        }
+
+        @keyframes fadeInHint {
+            to { opacity: 1; }
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 8px;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .audio-btn {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .volume-slider {
+            width: 50px;
+            height: 3px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #FFD700;
+            cursor: pointer;
+        }
+
+        .audio-info {
+            color: #FFD700;
+            font-size: 0.7rem;
+            font-weight: bold;
+            max-width: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* YouTube Embed (Hidden) */
+        .youtube-player {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        /* Auto-play modal */
+        .autoplay-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .autoplay-content {
+            background: rgba(0, 0, 0, 0.9);
+            color: #FFD700;
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid #FFD700;
+            text-align: center;
+            font-size: 1.3rem;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+            max-width: 500px;
+        }
+
+        .autoplay-content button {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .autoplay-content button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Auto-play modal -->
+    <div class="autoplay-modal" id="autoplayModal">
+        <div class="autoplay-content">
+            🎵 <strong>Chúc Mừng Sinh Nhật Ngọc Anh!</strong> 🎵<br><br>
+            Nhấn để bắt đầu thiệp sinh nhật với âm nhạc!
+            <br>
+            <button onclick="startExperience()">🎶 Bắt Đầu 🎂</button>
+        </div>
+    </div>
+
+    <!-- Canvas cho pháo hoa -->
+    <canvas id="fireworksCanvas"></canvas>
+
+    <!-- Title CHÚC MỪNG SINH NHẬT -->
+    <div class="birthday-title">CHÚC MỪNG SINH NHẬT!</div>
+
+    <!-- Avatar bên trái -->
+    <div class="avatar-frame">
+        <div class="avatar"></div>
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls" id="audioControls" style="display: none;">
+        <button class="audio-btn" id="playBtn" onclick="toggleMusic()">⏸</button>
+        <div class="volume-control">
+            <span style="color: #FFD700; font-size: 0.7rem;">🔊</span>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        </div>
+        <div class="audio-info" id="audioInfo">🎵 Playing</div>
+    </div>
+
+    <!-- YouTube Player (Hidden) -->
+    <div class="youtube-player" id="youtubePlayer"></div>
+
+    <!-- Khung chính RỘNG HƠN -->
+    <div class="main-frame">
+        <div class="text-container" id="textContainer">
+            <div class="scrolling-text" id="scrollingText">
+                Chào Ngọc Anh thân mến<br><br>
+                Hôm nay, khi bạn bước sang tuổi hai mốt, một dấu mốc thật đặc biệt<br>
+                trong hành trình cuộc đời, mình muốn gửi đến bạn những lời chúc tốt đẹp nhất<br><br>
+                Tuổi 21 không chỉ là một con số, mà còn là cột mốc nơi tuổi trẻ rực rỡ<br>
+                bắt đầu vươn mình, nơi những ước mơ khởi hành và những khát vọng<br>
+                được tiếp thêm sức mạnh<br><br>
+                Mình chúc bạn trong tuổi mới sẽ luôn giữ trong tim ngọn lửa đam mê,<br>
+                lòng nhiệt huyết và sự kiên định để theo đuổi đến cùng những điều bạn mong muốn<br><br>
+                Đặc biệt, tuổi hai mốt này còn ý nghĩa hơn nữa khi bạn sắp bắt đầu<br>
+                hành trình học tập tại một đất nước mới<br><br>
+                Hãy mang theo hành trang là tình yêu thương của gia đình, bạn bè,<br>
+                cùng những ký ức đẹp nơi quê nhà để vững tin bước đi<br><br>
+                Chúc cho tuổi 21 của bạn thật rực rỡ, trọn vẹn và bình an<br><br>
+                Chúc mừng sinh nhật, và chúc bạn một hành trình phía trước<br>
+                đầy may mắn, thành công và hạnh phúc
+            </div>
+        </div>
+
+        <div class="scroll-container" id="scrollContainer">
+            <div class="scroll-text">
+                <strong>Chào Ngọc Anh thân mến,</strong><br><br>
+
+                Hôm nay, khi bạn bước sang tuổi hai mốt, một dấu mốc thật đặc biệt trong hành trình cuộc đời, mình muốn gửi đến bạn những lời chúc tốt đẹp nhất. Tuổi 21 không chỉ là một con số, mà còn là cột mốc nơi tuổi trẻ rực rỡ bắt đầu vươn mình, nơi những ước mơ khởi hành và những khát vọng được tiếp thêm sức mạnh. Đây là thời điểm để bạn tin tưởng hơn vào chính bản thân mình, dám sống hết mình cho lý tưởng, và bước những bước dài trên con đường mà bạn lựa chọn.<br><br>
+
+                Mình chúc bạn trong tuổi mới sẽ luôn giữ trong tim ngọn lửa đam mê, lòng nhiệt huyết và sự kiên định để theo đuổi đến cùng những điều bạn mong muốn. Hãy trân trọng từng niềm vui nhỏ bé, để thấy hạnh phúc không ở đâu xa, và hãy học cách đón nhận thử thách, bởi chính chúng sẽ làm bạn trưởng thành, bản lĩnh và vững vàng hơn.<br><br>
+
+                Đặc biệt, tuổi hai mốt này còn ý nghĩa hơn nữa khi bạn sắp bắt đầu hành trình học tập tại một đất nước mới. Đó sẽ là một quãng đường nhiều mới mẻ và thử thách, nhưng cũng tràn đầy hứa hẹn và cơ hội. Hãy mang theo hành trang là tình yêu thương của gia đình, bạn bè, cùng những ký ức đẹp nơi quê nhà để vững tin bước đi. Dù ở phương trời nào, bạn cũng không bao giờ đơn độc, bởi luôn có những người ở phía sau dõi theo, tin tưởng và cầu chúc cho bạn.<br><br>
+
+                Mình tin rằng với sự thông minh, bản lĩnh và trái tim ấm áp, bạn sẽ viết nên một câu chuyện thật đáng tự hào cho chính tuổi trẻ của mình. Chúc cho tuổi 21 của bạn thật rực rỡ, trọn vẹn và bình an. <strong>Chúc mừng sinh nhật, và chúc bạn một hành trình phía trước đầy may mắn, thành công và hạnh phúc.</strong>
+            </div>
+        </div>
+
+        <div class="cake-container" id="cakeContainer">
+            <div class="cake">🎂</div>
+            <div class="age-text">21 TUỔI</div>
+            <div class="candles">🕯️ 🕯️ 🕯️</div>
+            <div class="birthday-wish">🎉 Chúc mừng sinh nhật Ngọc Anh! Thổi nến và ước nguyện nhé! 🎉</div>
+            <div class="scroll-hint">👆 Kéo lên để đọc lại lời chúc</div>
+        </div>
+    </div>
+
+    <script>
+        // YouTube API
+        let player;
+        let isPlaying = false;
+
+        // Start experience function
+        function startExperience() {
+            document.getElementById('autoplayModal').style.display = 'none';
+            document.getElementById('audioControls').style.display = 'flex';
+            
+            // Load YouTube API and start everything
+            loadYouTubeAPI();
+            startBirthdaySequence();
+        }
+
+        // Load YouTube API
+        function loadYouTubeAPI() {
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
+
+        // YouTube API ready callback
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtubePlayer', {
+                height: '1',
+                width: '1',
+                videoId: 'Wu8NeFXaoOc', // Nhạc cũ
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    loop: 1,
+                    playlist: 'Wu8NeFXaoOc',
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0
+                },
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange,
+                    onError: onPlayerError
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            player.setVolume(50);
+            player.playVideo();
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                document.getElementById('playBtn').textContent = '⏸';
+                document.getElementById('audioInfo').textContent = '🎵 Playing';
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                isPlaying = false;
+                document.getElementById('playBtn').textContent = '▶';
+                document.getElementById('audioInfo').textContent = '🎵 Paused';
+            }
+        }
+
+        function onPlayerError(event) {
+            console.error('YouTube Player Error:', event.data);
+            document.getElementById('audioInfo').textContent = '🎵 Error';
+        }
+
+        // Toggle music
+        function toggleMusic() {
+            if (player && player.getPlayerState) {
+                if (isPlaying) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+            }
+        }
+
+        // Volume control
+        document.getElementById('volumeSlider').addEventListener('input', function() {
+            if (player && player.setVolume) {
+                player.setVolume(this.value);
+            }
+        });
+
+        // Canvas setup - PHÁO HOA TỐI ƯU (KHÔNG LAG)
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Mảng pháo hoa
+        const fireworks = [];
+        const particles = [];
+
+        // Class Firework tối ưu
+        class Firework {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.targetY = Math.random() * canvas.height * 0.5;
+                this.speed = 2.5;
+                this.hue = Math.random() * 360;
+                this.exploded = false;
+            }
+
+            update() {
+                if (!this.exploded) {
+                    this.y -= this.speed;
+                    if (this.y <= this.targetY) {
+                        this.explode();
+                    }
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                // Số particles vừa phải - không quá nhiều
+                for (let i = 0; i < 35; i++) {
+                    particles.push(new Particle(this.x, this.y, this.hue));
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    ctx.save();
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = `hsl(${this.hue}, 100%, 50%)`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsl(${this.hue}, 100%, 60%)`;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+        }
+
+        // Class Particle tối ưu
+        class Particle {
+            constructor(x, y, hue) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 9;
+                this.vy = (Math.random() - 0.5) * 9;
+                this.gravity = 0.1;
+                this.friction = 0.98;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.01;
+                this.hue = hue + Math.random() * 50 - 25;
+                this.size = Math.random() * 2.5 + 1.5;
+            }
+
+            update() {
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = `hsl(${this.hue}, 100%, 50%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${this.hue}, 100%, 65%)`;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Tạo pháo hoa
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = canvas.height;
+            fireworks.push(new Firework(x, y));
+        }
+
+        // Animation loop tối ưu
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update fireworks
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update();
+                fireworks[i].draw();
+                if (fireworks[i].exploded) {
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Main timeline - PHÁO HOA VỪA PHẢI KHÔNG LAG
+        function startBirthdaySequence() {
+            animate();
+            
+            // Pháo hoa vừa phải - 800ms interval
+            setInterval(createFirework, 800);
+            
+            // Random thêm - 40% chance
+            setInterval(() => {
+                if (Math.random() < 0.4) {
+                    createFirework();
+                }
+            }, 400);
+            
+            // Burst nhẹ mỗi 5 giây
+            setInterval(() => {
+                if (Math.random() < 0.6) {
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => createFirework(), i * 200);
+                    }
+                }
+            }, 5000);
+            
+            // Show cake after 25 seconds
+            setTimeout(() => {
+                document.getElementById('textContainer').style.display = 'none';
+                document.getElementById('cakeContainer').style.display = 'block';
+                
+                setTimeout(() => {
+                    document.getElementById('cakeContainer').addEventListener('wheel', (e) => {
+                        if (e.deltaY < 0) {
+                            document.getElementById('cakeContainer').style.display = 'none';
+                            document.getElementById('scrollContainer').style.display = 'block';
+                        }
+                    });
+                }, 1000);
+                
+                // Celebration fireworks cho cake - vừa phải
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(() => createFirework(), i * 150);
+                }
+            }, 25000);
+        }
+
+        // Resize canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Click to create firework - chỉ 1 cái
+        canvas.addEventListener('click', (e) => {
+            if (!e.target.closest('.audio-controls') && !e.target.closest('.autoplay-modal')) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                fireworks.push(new Firework(x, canvas.height));
+            }
+        });
+
+        // Scroll back to cake
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('scrollContainer').style.display = 'none';
+                document.getElementById('cakeContainer').style.display = 'block';
+            }
+        });
+
+        // Make this globally available for YouTube API
+        window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+    </script>
+</body>
+</html>
